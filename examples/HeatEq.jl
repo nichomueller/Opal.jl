@@ -52,10 +52,9 @@ gμt(μ,t) = parameterise(g,μ,t)
 u0(μ) = x -> 0.0
 u0μ(μ) = parameterise(u0,μ)
 
-stiffness(μ,t,u,v,dΩ) = ∫(aμt(μ,t)*∇(v)⋅∇(u))dΩ
-mass(μ,t,uₜ,v,dΩ) = ∫(v*uₜ)dΩ
-rhs(μ,t,v,dΩ,dΓn) = ∫(fμt(μ,t)*v)dΩ + ∫(hμt(μ,t)*v)dΓn
-res(μ,t,u,v,dΩ,dΓn) = mass(μ,t,∂t(u),v,dΩ) + stiffness(μ,t,u,v,dΩ) - rhs(μ,t,v,dΩ,dΓn)
+stiffness(μ,t,u,v) = ∫(aμt(μ,t)*∇(v)⋅∇(u))dΩ
+mass(μ,t,uₜ,v) = ∫(v*uₜ)dΩ
+rhs(μ,t,v,dΓn) = ∫(fμt(μ,t)*v)dΩ + ∫(hμt(μ,t)*v)dΓn
 
 trian_res = (Ω,Γn)
 trian_stiffness = (Ω,)
@@ -65,7 +64,7 @@ domains = FEDomains(trian_res,(trian_stiffness,trian_mass))
 reffe = ReferenceFE(lagrangian,Float64,order)
 test = TestFESpace(model,reffe;conformity=:H1,dirichlet_tags=[1,3,7])
 trial = TransientTrialParamFESpace(test,gμt)
-feop = TransientLinearParamOperator(res,(stiffness,mass),ptspace,trial,test,domains)
+feop = TransientLinearParamOperator(rhs,(stiffness,mass),ptspace,trial,test,domains)
 
 uh0μ(μ) = interpolate_everywhere(u0μ(μ),trial(μ,t0))
 
@@ -115,7 +114,7 @@ visualise(true_states,results1,ts,variable=4)
 
 # now try with a ROM
 
-energy(du,v) = ∫(∇(v)⋅∇(du))dΩ
+energy(du,v) = ∫(v*du)dΩ + ∫(∇(v)⋅∇(du))dΩ
 tol = 1e-1
 nparams_tot = 80
 nparams_train = 50
@@ -159,10 +158,10 @@ save(dir,results3;label="calibrated_ROM")
 
 using BlockArrays
 
-true_history = load(dir,history_label)
-results1 = load(dir,output_label;label="FEM")
-results2 = load(dir,output_label;label="ROM")
-results3 = load(dir,output_label;label="calibrated_ROM")
+true_history = load(dir,HISTORY_LABEL)
+results1 = load(dir,OUTPUT_LABEL;label="FEM")
+results2 = load(dir,OUTPUT_LABEL;label="ROM")
+results3 = load(dir,OUTPUT_LABEL;label="calibrated_ROM")
 
 grid = ts[DA]
 states1 = map(get_state,results1.state_history)

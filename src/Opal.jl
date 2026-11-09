@@ -196,9 +196,9 @@ export NIS
 export SpreadSkillRatio
 export InnovationACF
 export RankHistogram
-export law_label
-export history_label
-export output_label
+export LAW_LABEL
+export HISTORY_LABEL
+export OUTPUT_LABEL
 include("Postprocess.jl")
 
 export DAMethod

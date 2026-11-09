@@ -24,12 +24,6 @@ feature a second moment (i.e. they are equipped by a variance) then a confidence
 The true data `true_values`, if known, may be provided, and will be plotted on the same figure. The 
 keyword `variable` -- an integer -- indicates the state member to be plotted.
 """
-## The three leaf methods that call into Plots directly --
-## visualise(::History,...), visualise(::AbstractVector{<:FirstMoment},...) and
-## visualise(::AbstractMatrix,::History,...) -- live in ext/OpalPlotsExt.jl, since Plots
-## is an optional (weak) dependency. Without Plots loaded, calling them raises a plain
-## MethodError, which is the standard pattern for Julia package extensions.
-
 function visualise(
   history::History,
   ts::TimeStencils;
@@ -369,9 +363,6 @@ A close match between the histogram and the fitted curve confirms filter consist
 shifted histogram indicates bias and a mismatch in width indicates over- or
 under-estimation of the observation-error covariance.
 """
-## The leaf method visualise_innovation_pdf(::DAResults;...) that calls into Plots lives in
-## ext/OpalPlotsExt.jl, see the note above visualise's relay methods.
-
 function visualise_innovation_pdf(
   r::DAResults,
   ts::TimeStencils;
@@ -390,14 +381,14 @@ end
 
 # IO
 
-const law_label = "law"
-const history_label = "history"
-const output_label = "results"
+const LAW_LABEL = "law"
+const HISTORY_LABEL = "history"
+const OUTPUT_LABEL = "results"
 
 base_label(x) = @abstractmethod
-base_label(x::Law) = law_label
-base_label(x::History) = history_label
-base_label(x::DAResults) = output_label
+base_label(x::Law) = LAW_LABEL
+base_label(x::History) = HISTORY_LABEL
+base_label(x::DAResults) = OUTPUT_LABEL
 base_label(x::StencilArray) = base_label(x.array)
 
 function save(dir,x;label="")
@@ -405,7 +396,7 @@ function save(dir,x;label="")
   serialize(stats_dir,x)
 end
 
-function load(dir,base=law_label;label="")
+function load(dir,base=LAW_LABEL;label="")
   stats_dir = get_filename(dir,base,label)
   deserialize(stats_dir)
 end

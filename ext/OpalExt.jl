@@ -1,4 +1,4 @@
-module OpalPlotsExt
+module OpalExt
 
 using Opal
 using Plots
