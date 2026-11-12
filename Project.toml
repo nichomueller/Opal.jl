@@ -66,7 +66,7 @@ Plots = "1.41"
 Random = "1.11"
 ReservoirComputing = "0.12"
 ReverseDiff = "1.16.2"
-SciMLBase = "2.138"
+SciMLBase = "2.138, 3"
 SciMLSensitivity = "7.103.0"
 Serialization = "1.11.0"
 SparseArrays = "1.11"
@@ -82,4 +82,4 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Plots","Test"]
+test = ["Plots", "Test"]
