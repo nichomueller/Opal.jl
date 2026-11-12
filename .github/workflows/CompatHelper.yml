@@ -14,6 +14,7 @@ jobs:
         run: julia -e 'using Pkg; Pkg.add("CompatHelper")'
       - name: Run CompatHelper
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Set this repository secret to a token with contents and pull-requests write access.
+          GITHUB_TOKEN: ${{ secrets.COMPATHELPER_TOKEN }}
           COMPATHELPER_PRIV: ${{ secrets.COMPATHELPER_PRIV }}
         run: julia -e 'using CompatHelper; CompatHelper.main()'
