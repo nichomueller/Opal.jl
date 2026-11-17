@@ -182,7 +182,7 @@ d = joint_law(dp,du)
 sol = Gridap.solve(solver,feop,pt,uh0μ)
 model = TransientPDEModel(sol)
 
-u, = solution_snapshots(solver,feop,pt,uh0μ)
+u = solution_snapshots(solver,feop,pt,uh0μ)
 
 cache = return_cache(model,d)
 d′ = evaluate!(cache,model,d)

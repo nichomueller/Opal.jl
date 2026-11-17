@@ -101,8 +101,8 @@ ode_solver = GeneralizedAlpha1(nls,Δt,0.9)
 
 function initial_condition(r)
   μ = get_params(r)
-  x₀, = solve(nls,op₀,μ)
-  (r₀,xₜ₀), = solve(ode_solver₀,op,r,x₀)
+  x₀ = solve(nls,op₀,μ)
+  (r₀,xₜ₀) = solve(ode_solver₀,op,r,x₀)
   ẋₜ₀ = get_free_dof_values(ẋₕ₀μ(μ))
   (xₜ₀,ẋₜ₀)
 end

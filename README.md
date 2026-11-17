@@ -156,7 +156,7 @@ enkf = KalmanFilter(transition,observation,d;obs_noise)
 results = loop(enkf,obs)
 
 # alternatively build a reduced-order operator with GridapROMs
-fesnaps, = solution_snapshots(rbsolver,feop,uh0μ)
+fesnaps = solution_snapshots(rbsolver,feop,uh0μ)
 rbop = reduced_operator(rbsolver,feop,fesnaps)
 rbsol = solve(rbsolver,rbop,μ,uh0μ)
 transition = MemoryModel(rbsol)

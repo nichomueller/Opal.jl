@@ -385,21 +385,10 @@ const LAW_LABEL = "law"
 const HISTORY_LABEL = "history"
 const OUTPUT_LABEL = "results"
 
-base_label(x) = @abstractmethod
-base_label(x::Law) = LAW_LABEL
-base_label(x::History) = HISTORY_LABEL
-base_label(x::DAResults) = OUTPUT_LABEL
-base_label(x::StencilArray) = base_label(x.array)
-
-function save(dir,x;label="")
-  stats_dir = get_filename(dir,base_label(x),label)
-  serialize(stats_dir,x)
-end
-
-function load(dir,base=LAW_LABEL;label="")
-  stats_dir = get_filename(dir,base,label)
-  deserialize(stats_dir)
-end
+get_label(x::Law) = LAW_LABEL
+get_label(x::History) = HISTORY_LABEL
+get_label(x::DAResults) = OUTPUT_LABEL
+get_label(x::StencilArray) = get_label(x.array)
 
 # utils 
 

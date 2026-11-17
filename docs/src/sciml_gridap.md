@@ -228,7 +228,7 @@ energy(du,v) = ∫(v*du)dΩ + ∫(∇(v)⋅∇(du))dΩ
 tol = 1e-4
 state_reduction = SteadyReduction(tol,energy;nparams,sketch=:sprn)
 rbsolver = RBSolver(solver,state_reduction)
-fesnaps, = solution_snapshots(rbsolver,feop,uh0μ)
+fesnaps = solution_snapshots(rbsolver,feop,uh0μ)
 rbop = reduced_operator(rbsolver,feop,fesnaps)
 
 rbsol = solve(solver,rbop,μ,uh0μ)

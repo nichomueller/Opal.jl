@@ -307,45 +307,6 @@ end
 get_parameters(d::Law) = blocks(get_state(d))[1]
 mean_parameters(d::Law) = blocks(mean(d))[1]
 
-function select_time(s::TransientSnapshotsWithIC,tindex::Int)
-  select_time(s.snaps,tindex)
-end
-
-function select_time(s::TransientGenericSnapshots,tindex::Int) 
-  np = num_params(s)
-  prange = 1:np
-  GenericSnapshots(
-    select_all_data(s,prange,tindex),
-    select_param_data(s.param_data,prange,tindex;nparams=np),
-    get_dof_map(s),
-    get_params(get_realisation(s))
-  )
-end
-
-function select_time(s::TransientBlockSnapshots{N},tindex) where N
-  array = Array{Any,N}(undef,size(s))
-  for i in eachindex(s.touched)
-    if s.touched[i]
-      array[i] = select_time(s[i],tindex)
-    end
-  end
-  np = num_params(s)
-  prange = 1:np
-  pdrange = select_param_data(s.param_data,prange,tindex;nparams=np)
-  return BlockSnapshots(array,s.touched,pdrange)
-end
-
-function ParamDataStructures.select_param_data(
-  pdata::ConsecutiveParamArray{T,N},
-  prange,tindex::Int;
-  nparams=param_length(pdata)
-  ) where {T,N}
-
-  trange = ParamDataStructures._format_index(tindex)
-  data = view(pdata.data,_ncolons(Val{N}())...,range_1d(prange,trange,nparams))
-  ConsecutiveParamArray(data)
-end
-
 maxlags(μ::Realisation) = num_params(μ)*(num_params(μ)-1)/2
 
 function _obs_err_snaps(observation,fesnaps,rbsnaps)

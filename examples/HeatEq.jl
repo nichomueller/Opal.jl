@@ -122,7 +122,7 @@ nparams_train = 50
 μ_train = realisation(ptspace;nparams=nparams_train)
 state_reduction = SteadyReduction(tol,energy;nparams=nparams_train,sketch=:sprn)
 rbsolver = RBSolver(solver,state_reduction)
-fesnaps, = solution_snapshots(rbsolver,feop,μ_tot,uh0μ)
+fesnaps = solution_snapshots(rbsolver,feop,μ_tot,uh0μ)
 rbop = reduced_operator(rbsolver,feop,fesnaps)
 
 rbsol = solve(solver,rbop,μ,uh0μ)
@@ -141,11 +141,11 @@ rbtransition = MemoryModel(rbsol)
 warmup!(rbtransition,ts)
 rbenkf = KalmanFilter(rbtransition,observation,copy(d);obs_noise)
 
-rbsnaps, = solution_snapshots(rbsolver,rbop,μ_tot,uh0μ)
+rbsnaps = solution_snapshots(rbsolver,rbop,μ_tot,uh0μ)
 
 ids_cal = nparams_train+1:nparams_tot
 μ_cal = μ_tot[ids_cal,:]
-rbsnaps_cal, = solution_snapshots(rbsolver,rbop,μ_cal,uh0μ)
+rbsnaps_cal = solution_snapshots(rbsolver,rbop,μ_cal,uh0μ)
 fesnaps_cal = select_snapshots(fesnaps,ids_cal)
 
 calibration = KrigingCalibration(observation,fesnaps_cal,rbsnaps_cal,ts)
